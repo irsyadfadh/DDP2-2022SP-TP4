@@ -6,29 +6,28 @@ public class Division {
     private int baseSalary;
     private List<Employee> employeeList;
 
-    // TODO: Lengkapi constructor
+    // Constructor
     public Division(int baseSalary) {
         this.baseSalary = baseSalary;
         this.employeeList = new ArrayList<>();
     }
 
-    // TODO: Lengkapi logika untuk menambahkan karyawan
+    /*Method untuk menambahkan karyawan ke dalam daftar karyawan divisi ini. */
     public void addEmployee(Employee employee) {
         if (employee instanceof Manager) {
             employeeList.add(0, employee); //menambahkan manager pada indeks terdepan
-                        System.out.println("aadaa");
 
         } else {
             employeeList.add(employee);
-            System.out.println("adaa");
         }
     }
 
     // Tambahkan getter & setter lainnya sesuai kebutuhan
+    /*Getter untuk mendapatkan daftar karyawan pada divisi */
     public List<Employee> getEmployeeList() {
         return employeeList;
     }
-
+    /*Getter untuk mendapatkan gaji dasar (base salary) */
     public int getBaseSalary() {
         return baseSalary;
     }

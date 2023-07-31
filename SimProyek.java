@@ -174,7 +174,7 @@ public class SimProyek {
     }
 
     // Silahkan tambahkan method lain yang dirasa dapat membantu
-
+    // Method untuk menampilkan daftar proyek beserta nomor urutannya tanpa menampilkan informasi detail seperti leader dan jumlah anggota proyek.
     private void printProjectListNumberOnly() {
         int projectNumber = 1;
         for (Project project : projectList) {
@@ -182,7 +182,7 @@ public class SimProyek {
             projectNumber++;
         }
     }
-    
+    /*Method untuk menampilkan detail divisi berdasarkan pilihan nomor divisi yang diberikan pengguna. */
     private void printDivisionDetail(int nomorPilihan) {
         if (nomorPilihan >= 1 && nomorPilihan <= divisionList.size()) {
             Division selectedDivision = divisionList.get(nomorPilihan - 1);
@@ -209,6 +209,7 @@ public class SimProyek {
         }
     }
     
+    /*Method untuk menambahkan karyawan baru ke dalam sistem SimProyek.  */
     private void addEmployee(String namaKaryawan, String jabatan, int lamaBekerja, double bonusGaji, int nomorDivisi) {
         Employee newEmployee;
         if (jabatan.equalsIgnoreCase("Manager")) {
@@ -245,6 +246,7 @@ public class SimProyek {
         System.out.println("Karyawan " + namaKaryawan + " berhasil ditambahkan ke divisi " + selectedDivision.getName() + ".");
     } 
 
+    /*Method untuk menampilkan daftar proyek beserta informasi detailnya seperti leader dan jumlah anggota proyek. */
     private void printProjectList() {
         int projectNumber = 1;
         for (Project project : projectList) {
@@ -258,7 +260,7 @@ public class SimProyek {
             projectNumber++;
         }
     }
-    
+    /*Method untuk menampilkan detail proyek berdasarkan pilihan nomor proyek yang diberikan pengguna.  */
     private void projectDetail(int nomorPilihan) {
         if (projectList.isEmpty()) {
             System.out.println("Sistem SimProyek belum memiliki proyek.");
@@ -294,7 +296,7 @@ public class SimProyek {
         }
     }
     
-    
+    /*Method untuk menghapus anggota proyek berdasarkan nomor proyek dan nomor anggota yang diberikan pengguna. */
     private void deleteProjectMember(int nomorPilihan, int nomorAnggota) {
         if (nomorPilihan >= 1 && nomorPilihan <= projectList.size()) {
             Project project = projectList.get(nomorPilihan - 1);
@@ -314,7 +316,7 @@ public class SimProyek {
     }
     
     
-    
+    /*Method untuk menambahkan anggota ke proyek berdasarkan nomor proyek dan nama karyawan yang diberikan pengguna.  */
     private void addProjectMember(int nomorPilihan, String namaKaryawan) {
         if (nomorPilihan >= 1 && nomorPilihan <= projectList.size()) {
             Project project = projectList.get(nomorPilihan - 1);
@@ -370,7 +372,7 @@ public class SimProyek {
     }
     
     
-    
+    /*Method untuk membuat proyek baru berdasarkan nama proyek yang diberikan pengguna.  */
     private void createProject(String projectName) {
         boolean projectExist = false;
         for (Project project : projectList) {
@@ -402,7 +404,7 @@ public class SimProyek {
         }
         return count;
     }
-    
+    /*Method untuk menghitung jumlah manajer dalam suatu divisi. */
     private int countManagers(Division division) {
         int count = 0;
         for (Employee employee : division.getEmployeeList()) {
@@ -412,7 +414,7 @@ public class SimProyek {
         }
         return count;
     }
-    
+    /*Method untuk mendapatkan daftar proyek yang diikuti oleh suatu karyawan. */
     private List<Project> getEmployeeProjects(Employee employee) {
         List<Project> employeeProjects = new ArrayList<>();
         for (Project project : projectList) {
@@ -424,7 +426,7 @@ public class SimProyek {
     }
 
     
-    
+    /*Method print menu */
      private void printMenu() {
         System.out.println("Menu:");
         System.out.println("1. Tambah proyek        ");
@@ -438,7 +440,7 @@ public class SimProyek {
         System.out.println("99. Keluar              ");
         System.out.print("Pilih menu: ");
     }
-
+    /*Method untuk menginisialisasi daftar divisi dalam sistem SimProyek. */
     private void mockDivisionData() {
         Division hrd = new HRD(5000000);
         Division marketing = new Marketing(7000000);
@@ -450,7 +452,8 @@ public class SimProyek {
         divisionList.add(design);
         divisionList.add(engineering);
     }
-
+    /*Method untuk menginisialisasi data awalan dalam sistem SimProyek.  */
+    // Method ini digunakan untuk menambahkan karyawan dan proyek-proyek ke dalam sistem sebagai contoh data awal
     private void mockData() {
         Division hrd = this.divisionList.get(0);
         Division marketing = this.divisionList.get(1);
@@ -460,7 +463,7 @@ public class SimProyek {
         Manager ica = new Manager("Ica", 5, 0.3);
         Manager andi = new Manager("Andi", 4, 0.25);
 
-        //Employee udin = new Employee("Udin", 2, 0.1);
+        Employee udin = new Employee("Udin", 2, 0.1);
         Employee fira = new Employee("Fira", 1, 0.05);
         Employee opet = new Employee("Opet", 3, 0.15);
         Employee mirna = new Employee("Mirna", 4, 0.2);
@@ -472,7 +475,7 @@ public class SimProyek {
         this.employeeList.add(budi);
         this.employeeList.add(ica);
         this.employeeList.add(andi);
-        //this.employeeList.add(udin);
+        this.employeeList.add(udin);
         this.employeeList.add(fira);
         this.employeeList.add(opet);
         this.employeeList.add(mirna);
@@ -482,7 +485,7 @@ public class SimProyek {
         this.employeeList.add(tina);
         
         hrd.addEmployee(budi);
-        //hrd.addEmployee(udin);
+        hrd.addEmployee(udin);
         hrd.addEmployee(fira);
         hrd.addEmployee(opet);
 
@@ -500,7 +503,7 @@ public class SimProyek {
         Project compfestProject = new Project("Website COMPFEST");
 
         ufoProject.addMember(budi);
-        //ufoProject.addMember(udin);
+        ufoProject.addMember(udin);
         ufoProject.addMember(fira);
         ufoProject.addMember(opet);
 

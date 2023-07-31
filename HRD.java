@@ -4,6 +4,7 @@ public class HRD extends Division {
     }
 
     @Override
+    /*Override method untuk menambahkan karyawan ke dalam daftar karyawan divisi HRD. */
     public void addEmployee(Employee employee) {
         employee.setDivision(this);
         super.addEmployee(employee);
@@ -11,6 +12,7 @@ public class HRD extends Division {
     }
 
     @Override
+    /*Override method untuk menghasilkan representasi string dari objek HRD. */
     public String toString() {
         int totalEmployees = getEmployeeList().size();
         int totalManagers = 0;
@@ -23,6 +25,7 @@ public class HRD extends Division {
     }
 
     @Override
+    /*override method untuk mendapatkan nama divisi HRD */
     public String getName() {
         return "HRD";
     }

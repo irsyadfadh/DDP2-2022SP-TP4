@@ -13,7 +13,7 @@ public class Project {
         this.memberList = new ArrayList<>();
     }
 
-    // TODO: Lengkapi logika menambahkan anggota proyek
+    /*Method untuk menambahkan anggota proyek. */
     public void addMember(Employee employee) {
         if (employee instanceof Manager && projectLeader == null) {
             projectLeader = (Manager) employee;
@@ -27,7 +27,7 @@ public class Project {
     }
 
 
-    // TODO: Lengkapi logika menghapus anggota proyek
+    /*Method untuk menghapus anggota proyek. */
     public void removeMember(Employee employee) {
         if (employee instanceof Manager && employee.equals(projectLeader)) {
             projectLeader = null;
@@ -61,7 +61,7 @@ public class Project {
     public List<Employee> getMemberList() {
         return memberList;
     }
-
+    // Setter untuk mengatur daftar anggota proyek
     public void setMemberList(List<Employee> memberList) {
         this.memberList = memberList;
     }

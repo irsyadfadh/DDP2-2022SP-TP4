@@ -7,12 +7,14 @@ public class Manager extends Employee {
     }
 
     @Override
+    /*Override method untuk menghasilkan representasi string dari objek Manager. */
     public String toString() {
         // TODO
         return super.toString();
     }
 
     //tambahan
+    /*Method untuk menambahkan proyek ke daftar proyek yang dipegang oleh manager. */
     public void addProject(Project project) {
         // Periksa apakah manager sudah mengikuti 3 proyek
         if (getProjects().size() > MAX_PROJECTS) {

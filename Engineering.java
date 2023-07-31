@@ -5,6 +5,7 @@ public class Engineering extends Division {
     }
 
     @Override
+    /*Override method untuk menambahkan karyawan ke dalam daftar karyawan divisi Engineering. */
     public void addEmployee(Employee employee) {
         super.addEmployee(employee);
         employee.setDivision(this);
@@ -12,6 +13,7 @@ public class Engineering extends Division {
     }
 
     @Override
+    /*Override method untuk menghasilkan representasi string dari objek Engineering. */
     public String toString() {
         int totalEmployees = getEmployeeList().size();
         int totalManagers = 0;
@@ -24,6 +26,7 @@ public class Engineering extends Division {
     }
 
     @Override
+    /*Override method untuk mendapatkan nama divisi Engineering. */
     public String getName() {
         return "Engineering";
     }

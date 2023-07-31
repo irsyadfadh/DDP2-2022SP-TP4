@@ -5,6 +5,7 @@ public class Marketing extends Division {
     }
 
     @Override
+    /*Override method untuk menambahkan karyawan ke dalam daftar karyawan divisi Marketing */
     public void addEmployee(Employee employee) {
         super.addEmployee(employee);
         employee.setDivision(this);
@@ -12,6 +13,7 @@ public class Marketing extends Division {
     }
 
     @Override
+    /* Override method untuk menghasilkan representasi string dari objek Marketing. */
     public String toString() {
         int totalEmployees = getEmployeeList().size();
         int totalManagers = 0;

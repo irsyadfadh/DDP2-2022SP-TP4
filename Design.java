@@ -5,13 +5,14 @@ public class Design extends Division {
     }
 
     @Override
+    /*Override method untuk menambahkan karyawan ke dalam daftar karyawan divisi Design */
     public void addEmployee(Employee employee) {
         super.addEmployee(employee);
         employee.setDivision(this);
-        //System.out.println(employee.getClass().getSimpleName() + " " + employee.getName() + " berhasil ditambahkan ke divisi Design");
     }
 
     @Override
+    /*Override method untuk menghasilkan representasi string dari objek Design. */
     public String toString() {
         int totalEmployees = getEmployeeList().size();
         int totalManagers = 0;
@@ -24,6 +25,7 @@ public class Design extends Division {
     }
 
     @Override
+    /*Override method untuk mendapatkan nama divisi Design. */
     public String getName() {
         return "Design";
     }
