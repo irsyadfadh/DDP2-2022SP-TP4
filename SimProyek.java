@@ -9,7 +9,7 @@ public class SimProyek {
 
     public static void main(String[] args) {
         SimProyek app = new SimProyek();
-        app.mockDivisionData();
+    app.mockDivisionData();
 
         // Gunakan ini jika ingin menggunakan data awalan
         // Tidak wajib digunakan
@@ -144,6 +144,7 @@ public class SimProyek {
 
                     System.out.println();
                     break;
+
                 case 8:
                     System.out.println("Berikut adalah daftar divisi pada sistem SimProyek: ");
                     System.out.println("1. HRD");
@@ -175,30 +176,256 @@ public class SimProyek {
     // Silahkan tambahkan method lain yang dirasa dapat membantu
 
     private void printProjectListNumberOnly() {
+        int projectNumber = 1;
+        for (Project project : projectList) {
+            System.out.println(projectNumber + ". " + project.getName());
+            projectNumber++;
+        }
     }
-
+    
     private void printDivisionDetail(int nomorPilihan) {
+        if (nomorPilihan >= 1 && nomorPilihan <= divisionList.size()) {
+            Division selectedDivision = divisionList.get(nomorPilihan - 1);
+            System.out.println("Divisi " + selectedDivision.getName() + " memiliki " + (selectedDivision.getEmployeeList().size() - countManagers(selectedDivision)) +
+                    " karyawan dan " + countManagers(selectedDivision) + " manager.");
+    
+            int employeeNumber = 1;
+            for (Employee employee : selectedDivision.getEmployeeList()) {
+                System.out.print(employeeNumber + ". " + employee.getName() + " - " + employee.calculateSalary() + " - ");
+                List<Project> employeeProjects = getEmployeeProjects(employee);
+                if (!employeeProjects.isEmpty()) {
+                    System.out.print("Proyek ");
+                    for (Project project : employeeProjects) {
+                        System.out.print(project.getName() + ", ");
+                    }
+                    System.out.println();
+                } else {
+                    //System.out.println("Tidak memiliki proyek");
+                }
+                employeeNumber++;
+            }
+        } else {
+            System.out.println("Input invalid. Kembali ke menu utama.");
+        }
     }
-
+    
     private void addEmployee(String namaKaryawan, String jabatan, int lamaBekerja, double bonusGaji, int nomorDivisi) {
-    }
+        Employee newEmployee;
+        if (jabatan.equalsIgnoreCase("Manager")) {
+            newEmployee = new Manager(namaKaryawan, lamaBekerja, bonusGaji);
+        } else if (jabatan.equalsIgnoreCase("Employee")) {
+            newEmployee = new Employee(namaKaryawan, lamaBekerja, bonusGaji);
+        } else if (jabatan.equalsIgnoreCase("Intern")) {
+            newEmployee = new Intern(namaKaryawan, lamaBekerja, bonusGaji);
+        } else {
+            System.out.println("Jabatan tidak valid. Karyawan " + namaKaryawan + " tidak dapat ditambahkan.");
+            return;
+        }
+
+        Division selectedDivision;
+        switch (nomorDivisi) {
+            case 1:
+                selectedDivision = divisionList.get(0); // HRD
+                break;
+            case 2:
+                selectedDivision = divisionList.get(1); // Marketing
+                break;
+            case 3:
+                selectedDivision = divisionList.get(2); // Design
+                break;
+            case 4:
+                selectedDivision = divisionList.get(3); // Engineer
+                break;
+            default:
+                System.out.println("Divisi tidak valid. Karyawan " + namaKaryawan + " tidak dapat ditambahkan.");
+                return;
+        }
+        selectedDivision.addEmployee(newEmployee);
+        employeeList.add(newEmployee);
+        System.out.println("Karyawan " + namaKaryawan + " berhasil ditambahkan ke divisi " + selectedDivision.getName() + ".");
+    } 
 
     private void printProjectList() {
+        int projectNumber = 1;
+        for (Project project : projectList) {
+            System.out.println(projectNumber + ". " + project.getName());
+            if (project.getProjectLeader() != null) {
+                System.out.println("   Leader: " + project.getProjectLeader().getName());
+            } else {
+                System.out.println("   Leader: Tidak memiliki leader");
+            }
+            System.out.println("   Jumlah anggota: " + project.getMemberList().size());
+            projectNumber++;
+        }
     }
-
+    
     private void projectDetail(int nomorPilihan) {
+        if (projectList.isEmpty()) {
+            System.out.println("Sistem SimProyek belum memiliki proyek.");
+            return;
+        }
+        
+        if (nomorPilihan >= 1 && nomorPilihan <= projectList.size()) {
+            Project selectedProject = projectList.get(nomorPilihan - 1);
+            System.out.println(selectedProject.getName());
+            
+            // Menampilkan leader dari proyek
+            Employee projectLeader = selectedProject.getProjectLeader();
+            if (projectLeader != null) {
+                System.out.println("Leader: " + projectLeader.getName() + " - " + "Divisi " + projectLeader.getDivisionName());
+            } else {
+                System.out.println("Leader: Tidak memiliki leader");
+            }
+            
+            // Menampilkan anggota dari proyek
+            List<Employee> projectMembers = selectedProject.getMemberList();
+            if (!projectMembers.isEmpty()) {
+                System.out.println("Anggota:");
+                int memberNumber = 1;
+                for (Employee member : projectMembers) {
+                    System.out.println(memberNumber + ". " + member.getName() + " - " + "Divisi " + member.getDivisionName());
+                    memberNumber++;
+                }
+            } else {
+                System.out.println("Anggota: Tidak memiliki anggota");
+            }
+        } else {
+            System.out.println("Nomor proyek tidak valid.");
+        }
     }
-
+    
+    
     private void deleteProjectMember(int nomorPilihan, int nomorAnggota) {
+        if (nomorPilihan >= 1 && nomorPilihan <= projectList.size()) {
+            Project project = projectList.get(nomorPilihan - 1);
+            // Periksa apakah nomorAnggota valid (antara 1 dan jumlah anggota proyek)
+            try {
+                Employee employeeToRemove = project.getMemberList().get(nomorAnggota - 1);
+                project.removeMember(employeeToRemove);
+                employeeToRemove.removeProject(project); 
+                System.out.println("Anggota " + employeeToRemove.getName() + " berhasil dihapus dari proyek " + project.getName() + ".");
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Gagal: Proyek " + project.getName() + " sudah tidak memiliki anggota.");
+            }
+            
+        } else {
+            System.out.println("Pilihan proyek tidak valid.");
+        }
     }
-
+    
+    
+    
     private void addProjectMember(int nomorPilihan, String namaKaryawan) {
+        if (nomorPilihan >= 1 && nomorPilihan <= projectList.size()) {
+            Project project = projectList.get(nomorPilihan - 1);
+            Employee existingEmployee = null;
+            for (Employee employee : employeeList) {
+                if (namaKaryawan.equalsIgnoreCase(employee.getName())) {
+                    existingEmployee = employee;
+                    break;
+                } 
+            }
+    
+            if (existingEmployee != null) {
+                int jumlahMaksimumProject = 0;
+                if (existingEmployee instanceof Manager) {
+                    // Jika Manager belum menjadi leader di proyek lain miliknya, maka Manager tersebut akan menjadi leader
+                    boolean isLeaderInOtherProject = false;
+                    for (Project employeeProject : existingEmployee.getProjects()) {
+                        if (employeeProject.getProjectLeader() == existingEmployee) {
+                            isLeaderInOtherProject = true;
+                            break;
+                        }
+                    }
+                    if (!isLeaderInOtherProject && existingEmployee.getProjects().size() < Manager.MAX_PROJECTS) {
+                        // Jika Manager belum menjadi leader di proyek lain dan masih dapat mengikuti proyek
+                        project.setProjectLeader((Manager) existingEmployee);
+                    }
+                    jumlahMaksimumProject = Manager.MAX_PROJECTS;
+                } else if (existingEmployee instanceof Employee) {
+                    jumlahMaksimumProject = Employee.MAX_PROJECTS;
+                } else if (existingEmployee instanceof Intern) {
+                    jumlahMaksimumProject = Intern.MAX_PROJECTS;
+                }
+    
+                if (countProjectsForEmployee(existingEmployee) > jumlahMaksimumProject) {
+                    // Sudah mencapai batas maksimum proyek yang dapat diikuti
+                    System.out.println("Gagal: Karyawan " + existingEmployee.getName() + " hanya dapat mengikuti " + jumlahMaksimumProject + " proyek.");
+                } else if (project.getMemberList().contains(existingEmployee)) {
+                    // Sudah merupakan anggota proyek
+                    System.out.println("Gagal: Karyawan " + existingEmployee.getName() + " sudah merupakan anggota dari proyek " + project.getName() + ".");
+                } else {
+                    // Bisa ditambahkan ke proyek
+                    project.addMember(existingEmployee);
+                    existingEmployee.addProject(project);
+                    System.out.println("Karyawan " + existingEmployee.getName() + " berhasil ditambahkan ke proyek " + project.getName() + ".");
+                }
+            } else {
+                System.out.println("Gagal: Karyawan dengan nama " + namaKaryawan + " tidak ditemukan.");
+            }
+        } else {
+            // Pilihan proyek tidak valid
+            System.out.println("Input invalid. Kembali ke menu utama.");
+        }
     }
-
+    
+    
+    
     private void createProject(String projectName) {
+        boolean projectExist = false;
+        for (Project project : projectList) {
+            if (project.getName().equalsIgnoreCase(projectName)) {
+                System.out.println("Gagal: " + projectName + " telah terdaftar di dalam sistem");
+                projectExist = true;
+                break;
+            }
+        }
+        if (projectExist == false) {
+            Project newProject = new Project(projectName);
+            projectList.add(newProject);
+            System.out.println("Proyek " + projectName + " berhasil ditambahkan ke dalam sistem.");
+        }
+    }
+    // method tambahan
+    // Metode untuk menghitung jumlah proyek yang telah diikuti oleh suatu karyawan
+    private int countProjectsForEmployee(Employee employee) {
+        int count = 0;
+        for (Project project : projectList) {
+            if (project.getProjectLeader() != null && project.getProjectLeader().equals(employee)) {
+                count++;
+            }
+            for (Employee member : project.getMemberList()) {
+                if (member.equals(employee)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    
+    private int countManagers(Division division) {
+        int count = 0;
+        for (Employee employee : division.getEmployeeList()) {
+            if (employee instanceof Manager) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private List<Project> getEmployeeProjects(Employee employee) {
+        List<Project> employeeProjects = new ArrayList<>();
+        for (Project project : projectList) {
+            if (project.getProjectLeader() == employee || project.getMemberList().contains(employee)) {
+                employeeProjects.add(project);
+            }
+        }
+        return employeeProjects;
     }
 
-    private void printMenu() {
+    
+    
+     private void printMenu() {
         System.out.println("Menu:");
         System.out.println("1. Tambah proyek        ");
         System.out.println("2. Tambah anggota proyek");
@@ -233,7 +460,7 @@ public class SimProyek {
         Manager ica = new Manager("Ica", 5, 0.3);
         Manager andi = new Manager("Andi", 4, 0.25);
 
-        Employee udin = new Employee("Udin", 2, 0.1);
+        //Employee udin = new Employee("Udin", 2, 0.1);
         Employee fira = new Employee("Fira", 1, 0.05);
         Employee opet = new Employee("Opet", 3, 0.15);
         Employee mirna = new Employee("Mirna", 4, 0.2);
@@ -245,7 +472,7 @@ public class SimProyek {
         this.employeeList.add(budi);
         this.employeeList.add(ica);
         this.employeeList.add(andi);
-        this.employeeList.add(udin);
+        //this.employeeList.add(udin);
         this.employeeList.add(fira);
         this.employeeList.add(opet);
         this.employeeList.add(mirna);
@@ -255,7 +482,7 @@ public class SimProyek {
         this.employeeList.add(tina);
         
         hrd.addEmployee(budi);
-        hrd.addEmployee(udin);
+        //hrd.addEmployee(udin);
         hrd.addEmployee(fira);
         hrd.addEmployee(opet);
 
@@ -273,7 +500,7 @@ public class SimProyek {
         Project compfestProject = new Project("Website COMPFEST");
 
         ufoProject.addMember(budi);
-        ufoProject.addMember(udin);
+        //ufoProject.addMember(udin);
         ufoProject.addMember(fira);
         ufoProject.addMember(opet);
 

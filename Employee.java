@@ -7,7 +7,8 @@ public class Employee {
     private double salaryMultiplier;
     private Division division;
     private List<Project> projects;
-    private String position;
+
+    public static final int MAX_PROJECTS = 2;
 
     public Employee(String name, int yearsOfExperience, double salaryMultiplier) {
         this.name = name;
@@ -17,45 +18,68 @@ public class Employee {
     }
 
     public int calculateSalary() {
-        int baseSalary = this.division.getBaseSalary();
-        int experienceBonus = (int) (baseSalary * (0.1 * yearsOfExperience));
-        int positionBonus = (int) (baseSalary * salaryMultiplier);
-        return baseSalary + experienceBonus + positionBonus;
+        return (int) (division.getBaseSalary() * (1 + salaryMultiplier + yearsOfExperience / 10));
     }
 
     public String getDivisionName() {
-        return division.getClass().getSimpleName();
+        if (division != null) {
+            return division.getName();
+        } else {
+            return "Nama Divisi Tidak Diketahui";
+        }
     }
 
     public String getProjectsString() {
-        StringBuilder projectListString = new StringBuilder();
-        for (Project project : projects) {
-            projectListString.append(project.getName()).append(", ");
+        StringBuilder projectsString = new StringBuilder();
+        if (!projects.isEmpty()) {
+            for (Project project : projects) {
+                projectsString.append(project.getName()).append(", ");
+            }
+            // Menghapus koma dan spasi terakhir
+            projectsString.setLength(projectsString.length() - 2);
+        } else {
+            projectsString.append("Tidak sedang memegang proyek");
         }
-        if (projectListString.length() > 2) {
-            projectListString.setLength(projectListString.length() - 2);
-        }
-        return projectListString.toString();
+        return projectsString.toString();
     }
+    
+    
 
     public String getName() {
         return name;
     }
 
-    public String getPosition() {
-        return position;
+    public Division getDivision() {
+        return division;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setDivision(Division division) {
+        this.division = division;
     }
 
-    // Metode untuk menambahkan proyek ke dalam projects
+    public List<Project> getProjects() {
+        return projects;
+    }
+
     public void addProject(Project project) {
-        if (projects.size() < 2) {
-            projects.add(project);
+        if (projects.size() > MAX_PROJECTS) {
+            //System.out.println("Karyawan " + name + " hanya dapat mengikuti dua proyek.");
+            return;
         } else {
-            System.out.println("Karyawan " + name + " hanya dapat mengikuti dua proyek.");
+            projects.add(project);
         }
     }
+
+    @Override
+    public String toString() {
+        return name + " - " + calculateSalary() + " - " + getProjectsString();
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public void removeProject(Project project) {
+    }
+    
 }
